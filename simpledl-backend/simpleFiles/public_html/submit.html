@@ -1,0 +1,55 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+<title>NDLTD Document4051</title>
+<script src="https://apis.google.com/js/platform.js?onload=renderLoginButton" async="async" defer>;</script><meta name="google-signin-client_id" content="198962743816-7sdscou4pllp182nesibfg9e1281jn6a.apps.googleusercontent.com">
+<link href="styles/material-components-web.min.css" rel="stylesheet">
+<script src="styles/material-components-web.min.js">;</script><link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+<link rel="stylesheet" type="text/css" href="slick/slick.css">
+<link rel="stylesheet" type="text/css" href="slick/slick-theme.css">
+<script language="Javascript" src="scripts/search.js">;</script><script language="Javascript">
+         var basedir = "";
+      </script><script language="Javascript" src="scripts/login.js">;</script><link rel="stylesheet" title="mainstyle" type="text/css" href="styles/style.css">
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300;0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+</head>
+<body onunload="" onLoad="checkCookies ()">
+<div class="banner">
+<div class="banner-logo"><a href="index.html"><img src="images/docs.jpg"></a></div>
+<div class="banner-logins"><div class="banner-login"><div id="login"><a href="login.html" onClick="login1(this.href); return false">Login / Register</a></div></div></div>
+<div class="banner-links">
+<a href="index.html">Home</a> | 
+         <a href="about.html">About</a> | 
+         <a href="users.html">Authors</a> | 
+         <a href="search.html">Search</a> | 
+         <a href="contact.html">Contact Us</a>
+</div>
+</div>
+<div class="content">
+<h1>Submit a new contributed item</h1>
+<p>Please fill in the details of the file you are submitting.  More detail will make it easier to find your
+         contribution.  If you are uploading a text document, a searchable PDF is preferred.  Use the + button to add 
+         more fields where needed - for example, multiple authors should be added into multiple
+         fields.  Fields marked with a star are required.</p>
+<div class="addcomment" id="addcomment"><form id="mdform" name="addcommentform" class="addcommentformclass" enctype="multipart/form-data" method="post" action="cgi-bin/add.pl">
+<input type="hidden" name="url" id="addcommentformurl" value=""><input type="hidden" name="user" id="addcommentformuser" value=""><input type="hidden" name="userID" id="addcommentformuserID" value=""><div id="cabox">
+<h4>Resource to upload</h4>
+<p><label class="mdc-button mdc-button--outlined mdc-js-button"><i class="material-icons mdc-button__icon" aria-hidden="true">attach_file</i>
+                     Select a file to attach: <input type="file" id="cafile" name="cafile"></label></p>
+<h4>Metadata</h4>
+<div id="formcontents"></div>
+<input type="hidden" id="fullmetadata" name="fullmetadata" value=""><button class="addcomment-button mdc-button mdc-button--raised" type="submit" onClick="return submitMetadata ()"><span class="mdc-button__label">Submit contribution</span></button>
+</div>
+</form></div>
+<script>
+            mdc.ripple.MDCRipple.attachTo(document.querySelector('.addcomment-button'));
+            document.getElementById('addcommentformurl').value = document.location.href;
+            config = loadXML ("config/upload.xml");
+            createForm ();
+         </script><div class="addcommentoff" id="addcommentoff">
+         Login using the Google Signin button (top-right of page) to add a comment.
+         </div>
+</div>
+</body>
+</html>
