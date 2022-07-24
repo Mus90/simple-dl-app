@@ -15,7 +15,7 @@ function CreateInstance() {
       value: "simpleFiles/data/config/transform2.xsl",
     };
     try {
-      axios.post("localhost:8081/api/simple", body);
+      axios.post('http://localhost:8081/api/simple', body);
     } catch (err) {
       console.log(err);
     }
@@ -23,7 +23,7 @@ function CreateInstance() {
 
   async function generateHtmlPages() {
     try {
-      axios.get("localhost:8081/api/simple/1");
+      axios.get('http://localhost:8081/api/simple/1');
     } catch (err) {
       console.log(err);
     }
