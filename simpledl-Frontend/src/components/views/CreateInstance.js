@@ -37,7 +37,7 @@ const CreateInstance = () => {
           <Input
             type="text"
             name="name"
-            id="exampleName"
+            id="input"
             placeholder="Enter your new Archive Name"
             value={name}
             onChange={handleChange}
@@ -51,7 +51,7 @@ const CreateInstance = () => {
               generateHtmlPages();
             }}
           >
-            CreateInstance
+            Create Instance
           </Button>
         </FormGroup>
       </Form>

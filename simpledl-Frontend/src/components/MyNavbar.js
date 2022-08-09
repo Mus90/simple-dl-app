@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
 
 class MyNavbar extends Component {
   render() {
@@ -8,16 +7,10 @@ class MyNavbar extends Component {
       <div>
         <Navbar bg="dark" variant="dark">
           <Container>
-            <Navbar.Brand as={Link} to={"/"}>
-              SimpleDLMS
-            </Navbar.Brand>
+            <Navbar.Brand href="/">SimpleDLMS</Navbar.Brand>
             <Nav className="me-auto">
-              <Nav.Link as={Link} to={"/"}>
-                Home
-              </Nav.Link>
-              <Nav.Link as={Link} to={"/createInstance"}>
-                Create Instance
-              </Nav.Link>
+              <Nav.Link href="/">Home</Nav.Link>
+              <Nav.Link href="CreateInstance">CreateInstance</Nav.Link>
             </Nav>
           </Container>
         </Navbar>
