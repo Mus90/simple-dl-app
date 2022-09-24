@@ -25,10 +25,17 @@ public class ManageDlController {
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
-    @PostMapping("/simple/createInstance/{instanceName}")
+    @PostMapping("/simple/instance/{instanceName}")
     public ResponseEntity<String> createNewInstance(@PathVariable String instanceName) throws IOException {
         String responseMessage;
         responseMessage= manageDlService.createNewInstance(instanceName);
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/simple/instance/{instanceName}")
+    public ResponseEntity<String> deleteInstance(@PathVariable String instanceName) throws IOException {
+        String responseMessage;
+        responseMessage= manageDlService.deleteInstance(instanceName);
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 

@@ -57,6 +57,18 @@ public class ManageDlService {
         return "Simple DL creating instance process has been completed.";
     }
 
+    public String deleteInstance(String instanceName) throws IOException {
+
+        Process process = Runtime.getRuntime().exec("pwd");
+        printResults(process);
+        //TODO: check if the instance exist
+        System.out.println("****** delete instance ********");
+        Process deleteProcess = Runtime.getRuntime().exec("rm -rf  "+instanceName);
+        printResults(deleteProcess);
+
+        return "Simple DL delete instance process has been completed.";
+    }
+
 
     public static void printResults(Process process) throws IOException {
         StringBuilder builder = new StringBuilder();
