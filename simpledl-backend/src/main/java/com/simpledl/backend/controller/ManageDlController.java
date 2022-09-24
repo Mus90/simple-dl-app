@@ -25,10 +25,10 @@ public class ManageDlController {
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
-    @GetMapping("/simple/{activationCode}")
-    public ResponseEntity<String> createNewInstance(@PathVariable String activationCode) throws IOException {
+    @PostMapping("/simple/createInstance/{instanceName}")
+    public ResponseEntity<String> createNewInstance(@PathVariable String instanceName) throws IOException {
         String responseMessage;
-        responseMessage= manageDlService.activation(activationCode);
+        responseMessage= manageDlService.createNewInstance(instanceName);
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
