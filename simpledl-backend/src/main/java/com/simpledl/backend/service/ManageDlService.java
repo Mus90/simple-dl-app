@@ -2,6 +2,9 @@ package com.simpledl.backend.service;
 
 import org.springframework.stereotype.Service;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class ManageDlService {
@@ -61,25 +64,38 @@ public class ManageDlService {
 
         Process process = Runtime.getRuntime().exec("pwd");
         printResults(process);
-        //TODO: check if the instance exist
         System.out.println("****** delete instance ********");
-        Process deleteProcess = Runtime.getRuntime().exec("rm -rf  "+instanceName);
+        Process deleteProcess = Runtime.getRuntime().exec("rm -rf  " + instanceName);
         printResults(deleteProcess);
 
         return "Simple DL delete instance process has been completed.";
     }
 
+    public static List<String> getInstances() throws IOException {
+        Process process = Runtime.getRuntime().exec("ls");
+        String[] folderList = printResults(process).split("\n");
+        List<String> instanceList = new ArrayList<>();
+        List<String> listOfIgnored = Arrays.asList(new String[]{"mvnw", "mvnw.cmd", "pom.xml", "simpledl", "simpledl-backend.iml", "simpleFiles", "src", "target"});
+        for(int i=0;i<folderList.length-1;i++)
+        {
+            if(!listOfIgnored.contains(folderList[i]))
+                instanceList.add(folderList[i]);
+        }
 
-    public static void printResults(Process process) throws IOException {
+        return instanceList;
+    }
+
+
+    public static String printResults(Process process) throws IOException {
         StringBuilder builder = new StringBuilder();
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line = "";
         while ((line = reader.readLine()) != null) {
             builder.append(line);
             builder.append("\n");
-            //  System.out.println(line);
         }
-        System.out.println("Printing Results : "+builder.toString());
+        System.out.println("  "+builder);
+      return builder.toString();
     }
 
     public String updateFile(String path)  {
