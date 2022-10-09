@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -35,7 +36,20 @@ public class ManageDlController {
     @DeleteMapping("/simple/instance/{instanceName}")
     public ResponseEntity<String> deleteInstance(@PathVariable String instanceName) throws IOException {
         String responseMessage;
-        responseMessage= manageDlService.deleteInstance(instanceName);
+        List<String> instanceList = manageDlService.getInstances();
+        if(instanceList.contains(instanceName)) {
+            responseMessage = manageDlService.deleteInstance(instanceName);
+        }
+        else
+        {
+            return new ResponseEntity<>("Instance dos not exist ..", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }
+
+    @GetMapping("/simple/instances")
+    public ResponseEntity<List<String>> getInstances() throws IOException {
+        List<String> responseMessage = manageDlService.getInstances();
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
