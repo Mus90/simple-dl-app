@@ -9,21 +9,21 @@ import java.util.List;
 @Service
 public class ManageDlService {
 
-    public String activation(String name) throws IOException {
+    public String activateInstance(String instanceName) throws IOException {
 
         Process process = Runtime.getRuntime().exec("pwd");
         printResults(process);
 
         System.out.println("****** importing ********");
-        Process importProcess = Runtime.getRuntime().exec("perl simpleFiles/simpledl/bin/import.pl");
+        Process importProcess = Runtime.getRuntime().exec("perl "+instanceName+"/simpledl/bin/import.pl");
         printResults(importProcess);
 
         System.out.println("****** indexing ********");
-        Process indexProcess = Runtime.getRuntime().exec("perl simpleFiles/simpledl/bin/index.pl");
+        Process indexProcess = Runtime.getRuntime().exec("perl "+instanceName+"/simpledl/bin/index.pl");
         printResults(indexProcess);
 
         System.out.println("****** generating ********");
-        Process generateProcess = Runtime.getRuntime().exec("perl simpleFiles/simpledl/bin/generate.pl --website --force");
+        Process generateProcess = Runtime.getRuntime().exec("perl "+instanceName+"/simpledl/bin/generate.pl --website --force");
         printResults(generateProcess);
 
         return "Simple DL activation process has been completed.";
