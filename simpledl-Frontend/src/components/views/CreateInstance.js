@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
 import { Button, Form, FormGroup, Input, Label } from "reactstrap";
+import "../../App.css";
 
-const CreateInstance = () => {
+function CreateInstance() {
   const [name, setName] = useState("");
+
   const handleChange = (e) => {
     setName(e.target.value);
   };
@@ -14,41 +16,44 @@ const CreateInstance = () => {
       value: "simpleFiles/data/config/transform2.xsl",
     };
     try {
-      axios.post("http://localhost:8081/api/simple", body);
+      axios.post(
+        "http://localhost:8081/api/simple/instance/SampleInstance1",
+        body
+      );
     } catch (err) {
       console.log(err);
     }
   }
-
-  async function generateHtmlPages() {
-    try {
-      axios.get("http://localhost:8081/api/simple/1");
-    } catch (err) {
-      console.log(err);
-    }
-  }
+ //
+  // async function generateHtmlPages() {
+  //   try {
+  //     axios.get("http://localhost:8081/api/simple/2");
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
 
   return (
-    <div className="App">
-      <h2>Create Instance</h2>
+    <div>
+      <h2 className="header2">Create Instance</h2>
       <Form className="form">
-        <FormGroup>
+        <FormGroup floating>
           <Label for="InstanceName"> Name </Label>
           <Input
             type="text"
             name="name"
-            id="input"
-            placeholder="Enter your new Archive Name"
+            id="instanceName"
+            placeholder="Enter your Archive Name"
             value={name}
             onChange={handleChange}
           />
-        </FormGroup>
-        <FormGroup>
+
           <Button
+            className="mt-3"
+            size="lg"
             id="CreateButton"
             onClick={() => {
-              ChooseXSL();
-              generateHtmlPages();
+              ChooseXSL(name);
             }}
           >
             Create Instance
@@ -57,6 +62,6 @@ const CreateInstance = () => {
       </Form>
     </div>
   );
-};
+}
 
 export default CreateInstance;

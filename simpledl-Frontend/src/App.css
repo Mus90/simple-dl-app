@@ -13,6 +13,19 @@
   }
 }
 
+.form {
+  border: 2px solid #d3d3d3;
+  border-radius: .5em;
+  margin-bottom: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  padding: 1em;
+  text-align: left;
+  width: 800px;
+  height: 200px;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -39,4 +52,28 @@ ul {
   to {
     transform: rotate(360deg);
   }
+}
+
+
+label {
+  font-weight: 600;
+}
+
+.header2{
+  padding: 1em;
+  margin-top: 2 em;
+}
+
+.instanceList{
+  
+  border: 2px solid #d3d3d3;
+  border-radius: .5em;
+  margin-bottom: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  padding: 1em;
+  text-align: left;
+  width: 800px;
+  height: auto;
 }

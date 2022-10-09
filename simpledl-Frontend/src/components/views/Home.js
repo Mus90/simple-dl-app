@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./Home.css";
 import InstanceView from "./InstanceView";
 
 class Home extends Component {
