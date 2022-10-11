@@ -1,8 +1,0 @@
-To add a new collection, you need to do the following:
-
-    * Add a folder in data/spreadsheets (Example: etd2022)
-
-    * Update collection.csv in data/spreadsheets to add a new line for the created collection:
-
-    	In public_html/collcetion, add a new colloction folder + logo file.
-
