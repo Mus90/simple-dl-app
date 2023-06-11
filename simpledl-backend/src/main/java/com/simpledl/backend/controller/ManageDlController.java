@@ -36,9 +36,10 @@ public class ManageDlController {
     @PostMapping("/simple/instance/{instanceName}")
     public ResponseEntity<String> createNewInstance(@PathVariable String instanceName) throws IOException {
         String responseMessage;
+        String formattedInstanceName = instanceName.replaceAll("\\s+", "_"); // Replace spaces with underscores
         List<String> instanceList = manageDlService.getInstances();
-        if(!instanceList.contains(instanceName)) {
-            responseMessage = manageDlService.createNewInstance(instanceName);
+        if(!instanceList.contains(formattedInstanceName)) {
+            responseMessage = manageDlService.createNewInstance(formattedInstanceName);
         }else
         {
             return new ResponseEntity<>("Instance already exist ..", HttpStatus.CONFLICT);
