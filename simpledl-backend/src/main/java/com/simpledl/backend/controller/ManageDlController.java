@@ -1,12 +1,24 @@
 package com.simpledl.backend.controller;
 
-
 import com.simpledl.backend.model.FileDetails;
 import com.simpledl.backend.service.ManageDlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
+import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,6 +59,7 @@ public class ManageDlController {
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
+
     @DeleteMapping("/simple/instance/{instanceName}")
     public ResponseEntity<String> deleteInstance(@PathVariable String instanceName) throws IOException {
         String responseMessage;
@@ -78,5 +91,38 @@ public class ManageDlController {
 
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
+
+    @GetMapping("/{instanceName}/public_html/index.html")
+    public ResponseEntity<byte[]> getFile(@PathVariable String instanceName) throws IOException {
+        String basePath = "/Users/mustafa/simple-dl-app/simpledl-backend/";
+        String filePath = basePath + instanceName + "/public_html/index.html";
+
+        // Check if the instance directory exists
+        if (!Files.exists(Paths.get(basePath, instanceName))) {
+            return new ResponseEntity<byte[]>("Instance does not exist.".getBytes(), HttpStatus.NOT_FOUND);
+        }
+
+        // Read the file into a byte array
+        Path path = Paths.get(filePath);
+        if (!Files.exists(path)) {
+            return new ResponseEntity<byte[]>("File not found.".getBytes(), HttpStatus.NOT_FOUND);
+        }
+        byte[] fileContent = Files.readAllBytes(path);
+
+        // Set the appropriate headers for the response
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_HTML);
+
+        // Construct the URL including the port number
+        String url = "http://localhost:8081/api/" + instanceName + "/public_html/index.html";
+
+        // Set the Location header to the constructed URL
+        headers.set(HttpHeaders.LOCATION, url);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(fileContent);
+    }
+
 
 }
