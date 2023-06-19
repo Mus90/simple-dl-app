@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DL Instance Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="App">
+    <h1>DL Instance Management</h1>
+    <div class="container">
+      <div class="create-instance-section">
+        <h2>Create New Instance</h2>
+        <input type="text" id="newInstance" placeholder="Instance Name">
+        <button id="createButton">Create</button>
+      </div>
+
+      <div class="instances-section">
+        <h2>Instances</h2>
+        <table id="instanceTable">
+          <thead>
+            <tr>
+              <th>Instance Name</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Instance table rows will be dynamically generated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="editModal" class="modal">
+      <!-- Edit instance modal content -->
+    </div>
+
+    <div id="deleteModal" class="modal">
+      <!-- Delete instance modal content -->
+    </div>
+
+    <div id="alert" class="alert">
+      <!-- Alert message content -->
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
