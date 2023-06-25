@@ -1,0 +1,90 @@
+.App {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+.create-instance-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.instances-section {
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+.instances-label {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.table-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: 300px;
+  overflow-y: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.table td .instance-link {
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+}
+
+.instances-table {
+  width: 100%;
+}
+
+.instances-table th {
+  font-weight: bold;
+  padding: 10px;
+  text-align: left;
+}
+
+.instances-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.instances-table td .instance-link {
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+}
+
+.success {
+  background-color: #e7f6e7;
+  color: green;
+}
+
+.error {
+  background-color: #f6e7e7;
+  color: red;
+}
+

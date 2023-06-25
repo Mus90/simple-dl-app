@@ -24,23 +24,20 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/api/")
 public class ManageDlController {
 
     @Autowired
-    ManageDlService manageDlService;
+    private ManageDlService manageDlService;
 
     @GetMapping("/simple/{instanceName}")
     public ResponseEntity<String> activations(@PathVariable String instanceName) throws IOException {
         String responseMessage;
         List<String> instanceList = manageDlService.getInstances();
         if(instanceList.contains(instanceName)) {
-            responseMessage= manageDlService.activateInstance(instanceName);
-        }
-        else
-        {
-            return new ResponseEntity<>("Instance dos not exist ..", HttpStatus.NOT_FOUND);
+            responseMessage = manageDlService.activateInstance(instanceName);
+        } else {
+            return new ResponseEntity<>("Instance does not exist.", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
@@ -52,13 +49,12 @@ public class ManageDlController {
         List<String> instanceList = manageDlService.getInstances();
         if(!instanceList.contains(formattedInstanceName)) {
             responseMessage = manageDlService.createNewInstance(formattedInstanceName);
-        }else
-        {
-            return new ResponseEntity<>("Instance already exist ..", HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>("Instance already exists.", HttpStatus.CONFLICT);
         }
+        System.out.println("Response Message: " + responseMessage); // Add this line
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
-
 
     @DeleteMapping("/simple/instance/{instanceName}")
     public ResponseEntity<String> deleteInstance(@PathVariable String instanceName) throws IOException {
@@ -66,10 +62,8 @@ public class ManageDlController {
         List<String> instanceList = manageDlService.getInstances();
         if(instanceList.contains(instanceName)) {
             responseMessage = manageDlService.deleteInstance(instanceName);
-        }
-        else
-        {
-            return new ResponseEntity<>("Instance dos not exist ..", HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>("Instance does not exist.", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
@@ -84,45 +78,11 @@ public class ManageDlController {
     public ResponseEntity<String> updateFiles(@RequestBody FileDetails fileDetails) throws IOException {
         String responseMessage;
         //" simpleFiles/data/config/transform2.xsl"
-        if(fileDetails.getName().equals("xsl"))
+        if(fileDetails.getName().equals("xsl")) {
             responseMessage = manageDlService.updateFile(fileDetails.getValue());
-        else
-            return new ResponseEntity<>(fileDetails.getName()+" File Type Not Supported", HttpStatus.BAD_REQUEST);
-
+        } else {
+            return new ResponseEntity<>(fileDetails.getName() + " File Type Not Supported", HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
-
-    @GetMapping("/{instanceName}/public_html/index.html")
-    public ResponseEntity<byte[]> getFile(@PathVariable String instanceName) throws IOException {
-        String basePath = "/Users/mustafa/simple-dl-app/simpledl-backend/";
-        String filePath = basePath + instanceName + "/public_html/index.html";
-
-        // Check if the instance directory exists
-        if (!Files.exists(Paths.get(basePath, instanceName))) {
-            return new ResponseEntity<byte[]>("Instance does not exist.".getBytes(), HttpStatus.NOT_FOUND);
-        }
-
-        // Read the file into a byte array
-        Path path = Paths.get(filePath);
-        if (!Files.exists(path)) {
-            return new ResponseEntity<byte[]>("File not found.".getBytes(), HttpStatus.NOT_FOUND);
-        }
-        byte[] fileContent = Files.readAllBytes(path);
-
-        // Set the appropriate headers for the response
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_HTML);
-
-        // Construct the URL including the port number
-        String url = "http://localhost:8081/api/" + instanceName + "/public_html/index.html";
-
-        // Set the Location header to the constructed URL
-        headers.set(HttpHeaders.LOCATION, url);
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(fileContent);
-    }
-
-
 }

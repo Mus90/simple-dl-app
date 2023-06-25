@@ -57,7 +57,7 @@ public class ManageDlService {
         Process extractProcess = Runtime.getRuntime().exec(cmd);
         printResults(extractProcess);
 
-        return "Simple DL creating instance process has been completed.";
+        return "Instance has been created successfully.";
     }
 
     public String deleteInstance(String instanceName) throws IOException {
@@ -68,7 +68,7 @@ public class ManageDlService {
         Process deleteProcess = Runtime.getRuntime().exec("rm -rf  " + instanceName);
         printResults(deleteProcess);
 
-        return "Simple DL delete instance process has been completed.";
+        return "Instance has been deleted successfully.";
     }
 
     public static List<String> getInstances() throws IOException {
