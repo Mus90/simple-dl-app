@@ -78,7 +78,10 @@ window.onload = function () {
      });
  }
 
-
+function openInstanceInNewTab(instanceName) {
+  const filePath = `file:///Users/mustafa/simple-dl-app/simpledl-backend/${instanceName}/public_html/index.html`;
+  window.open(filePath, "_blank");
+}
   function showAlertMessage() {
     setShowAlert(true);
     setTimeout(() => {
@@ -147,7 +150,7 @@ window.onload = function () {
                    .map(
                      (instance) => `
                    <tr>
-                     <td>${instance}</td>
+                     <td><a href="#" class="instance-link" data-instance="${instance}">${instance}</a></td>
                      <td><button class="editButton" data-instance="${instance}">Edit</button></td>
                      <td><button class="deleteButton" data-instance="${instance}">Delete</button></td>
                    </tr>
@@ -180,7 +183,16 @@ window.onload = function () {
        handleDeleteInstance(instanceName, event.target);
      });
    }
- }
+
+   // Add event listener to handle opening instance in a new tab
+     const instanceLinks = document.getElementsByClassName("instance-link");
+     for (const link of instanceLinks) {
+       link.addEventListener("click", (event) => {
+         const instanceName = event.target.getAttribute("data-instance");
+         openInstanceInNewTab(instanceName);
+       });
+     }
+   }
 
   fetchInstances();
 };
