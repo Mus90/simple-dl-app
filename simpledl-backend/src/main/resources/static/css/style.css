@@ -19,6 +19,8 @@
 .instances-section {
   text-align: left;
   margin-bottom: 30px;
+  float: left; /* Added float property */
+  width: 100%; /* Added width property to control the width of the section */
 }
 
 .instances-label {

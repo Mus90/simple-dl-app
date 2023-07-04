@@ -1,31 +1,46 @@
-import React from 'react';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
+import React from "react";
+import PropTypes from "prop-types";
+import "./DeleteInstance.css";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
-function DeleteInstance({ show, instance, onHide, onDelete, deletingInstance }) {
-  const handleDelete = () => {
-    onDelete(instance);
+const DeleteInstance = ({ instance, onHide, onDelete, isLoading }) => {
+  const handleDelete = async () => {
+    try {
+      onHide();
+      await onDelete(instance);
+    } catch (error) {
+      console.error("Error deleting instance:", error);
+    }
+  };
+
+  const handleCancel = () => {
+    onHide();
   };
 
   return (
-    <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton>
-        <Modal.Title>Delete Instance</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <div className="alert-overlay">
+      <div className="alert-content">
+        {isLoading && <ProgressBar animated now={100} />}
+        <h4>Delete Instance</h4>
         <p>Are you sure you want to delete the instance "{instance}"?</p>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
-          Cancel
-        </Button>
-        <Button variant="danger" onClick={handleDelete} disabled={deletingInstance}>
-          {deletingInstance ? <Spinner animation="border" size="sm" /> : 'Delete'}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+        <div className="button-container">
+          <button className="cancel-btn" onClick={handleCancel}>
+            Cancel
+          </button>
+          <button className="delete-btn" onClick={handleDelete}>
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+DeleteInstance.propTypes = {
+  instance: PropTypes.string.isRequired,
+  onHide: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+};
 
 export default DeleteInstance;

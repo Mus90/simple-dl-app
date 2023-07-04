@@ -60,55 +60,34 @@
   cursor: pointer;
 }
 
-.instances-table {
-  width: 100%;
+.alert-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.instances-table th {
-  font-weight: bold;
-  padding: 10px;
-  text-align: left;
+.alert-content {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.instances-table td {
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-}
-
-.instances-table td .instance-link {
-  text-decoration: underline;
-  color: blue;
-  cursor: pointer;
-}
-
-.instance-table {
-  border-collapse: collapse;
-  width: 100%;
-  border: 1px solid #ddd;
-}
-
-.instance-table th,
-.instance-table td {
-  padding: 8px;
-  text-align: left;
-}
-
-.instance-table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-}
-
-.instance-table tr.even-row {
-  background-color: #f5f5f5;
-}
-
-.instance-table tr.odd-row {
-  background-color: #ffffff;
-}
-
-.instance-actions button {
+.dismiss-btn {
+  background-color: #ccc;
   border: none;
-  background: none;
+  border-radius: 4px;
+  padding: 8px 16px;
   cursor: pointer;
-  padding: 5px;
+}
+
+.dismiss-btn:hover {
+  background-color: #aaa;
 }

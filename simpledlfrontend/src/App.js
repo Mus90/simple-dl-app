@@ -1,27 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Form from "react-bootstrap/Form";
-import Alert from "react-bootstrap/Alert";
+import ProgressBar from "react-bootstrap/ProgressBar";
 import InstanceTable from "./Components/InstanceTable";
-import CreateInstance from "./Components/CreateInstance";
-import EditInstanceModal from "./Components/EditInstanceModal";
 import DeleteInstance from "./Components/DeleteInstance";
 import "./App.css";
-import { Button, Spinner } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import CreateInstance from "./Components/CreateInstance";
 
 function App() {
   const [instances, setInstances] = useState([]);
-  const [editModalShow, setEditModalShow] = useState(false);
-  const [editModalInstance, setEditModalInstance] = useState("");
-  const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [deleteModalInstance, setDeleteModalInstance] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
-  const [newInstance, setNewInstance] = useState("");
-  const [creatingInstance, setCreatingInstance] = useState(false);
-  const [deletingInstance, setDeletingInstance] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchInstances();
@@ -38,77 +28,60 @@ function App() {
     }
   };
 
-  const handleEditInstance = (instance) => {
-    setEditModalInstance(instance);
-    setEditModalShow(true);
-  };
-
-  const handleUpdateInstance = async (updatedInstance) => {
-    try {
-      const response = await axios.post(
-        `http://localhost:8081/api/simple/instance/${editModalInstance}`,
-        {
-          instance: updatedInstance,
-        }
-      );
-      setResponseMessage(response.data);
-      fetchInstances();
-      showAlertMessage();
-    } catch (error) {
-      console.error("Error updating instance:", error);
-    }
-    setEditModalShow(false);
-  };
-
-  const handleDeleteInstance = (instance) => {
+  const handleDeleteInstance = async (instance) => {
     setDeleteModalInstance(instance);
-    setDeleteModalShow(true);
+    setShowAlert(true);
+    // await new Promise((resolve) => setTimeout(resolve, 100)); // Delay setting isLoading to true
+    // setIsLoading(true);
   };
 
-  const handleConfirmDelete = async (instance) => {
+  const handleConfirmDelete = async () => {
     try {
-      setDeletingInstance(true);
-      const response = await axios.delete(
-        `http://localhost:8081/api/simple/instance/${instance}`
+      setShowAlert(false); // Hide the confirmation alert
+      setIsLoading(true); // Set isLoading to true before the request
+      await axios.delete(
+        `http://localhost:8081/api/simple/instance/${deleteModalInstance}`
       );
-      setResponseMessage(response.data);
+      setResponseMessage(
+        `Instance "${deleteModalInstance}" deleted successfully.`
+      );
       fetchInstances();
-      showAlertMessage();
     } catch (error) {
       console.error("Error deleting instance:", error);
+      setResponseMessage(`Error deleting instance: ${error.message}`);
     } finally {
-      setDeletingInstance(false);
-      setDeleteModalShow(false);
+      setDeleteModalInstance("");
+      setIsLoading(false); // Set isLoading back to false after the request completes
+      setTimeout(() => {
+        setShowAlert(true);
+      }, 100); // Delay showing the success alert to ensure it appears after the confirmation alert disappears
     }
   };
 
   const handleCreateInstance = async (newInstance) => {
     try {
-      setCreatingInstance(true);
       const trimmedInstance = newInstance.trim();
       if (trimmedInstance === "") {
         return;
       }
-      const response = await axios.post(
+      setIsLoading(true); // Set isLoading to true while waiting for the request
+      await axios.post(
         `http://localhost:8081/api/simple/instance/${newInstance}`
       );
-      setResponseMessage(response.data);
+      setResponseMessage(`Instance "${newInstance}" created successfully.`);
       fetchInstances();
-      showAlertMessage();
-      setNewInstance("");
     } catch (error) {
       console.error("Error creating instance:", error);
+      setResponseMessage(`Error creating instance: ${error.message}`);
     } finally {
-      setCreatingInstance(false);
+      setIsLoading(false); // Set isLoading back to false after the request completes
+      setShowAlert(true);
     }
   };
 
-  const showAlertMessage = () => {
-    setShowAlert(true);
-    setTimeout(() => {
-      setShowAlert(false);
-      setResponseMessage("");
-    }, 3000);
+  const dismissAlert = () => {
+    setShowAlert(false);
+    setResponseMessage("");
   };
 
   return (
@@ -119,64 +92,13 @@ function App() {
       </h1>
 
       <div className="container">
-        <div className="create-instance-section"></div>
-        <h2 style={{}}>
-          <span style={{ color: "red", fontFamily: "cursive" }}>Create </span>
-          New Instance
-        </h2>
-        <Form
-          style={{
-            display: "flex",
-            gap: "1rem",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Form.Group
-            controlId="newInstance"
-            style={{
-              display: "flex",
-              gap: "1rem",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Form.Label style={{ fontWeight: "bold" }}>
-              Instance Name:
-            </Form.Label>
-            <Form.Control
-              type="text"
-              value={newInstance}
-              onChange={(e) => setNewInstance(e.target.value)}
-              style={{ padding: "0.5rem" }}
-              placeholder="Instance Name"
-            />
-          </Form.Group>
-          <Button
-            variant="success"
-            onClick={() => handleCreateInstance(newInstance)}
-            style={{
-              backgroundColor: "lightgreen",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              padding: "0.725rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-
-              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            {creatingInstance ? (
-              <Spinner animation="border" size="sm" />
-            ) : (
-              <>
-                <FontAwesomeIcon icon={faPlus} />
-              </>
-            )}
-          </Button>
-        </Form>
+        <div className="create-instance-section">
+          <h2>
+            <span style={{ color: "red", fontFamily: "cursive" }}>Create</span>{" "}
+            New Instance
+          </h2>
+          <CreateInstance handleCreateInstance={handleCreateInstance} />
+        </div>
       </div>
 
       <div className="instances-section">
@@ -184,7 +106,6 @@ function App() {
         {instances.length > 0 ? (
           <InstanceTable
             instances={instances}
-            onEdit={handleEditInstance}
             onDelete={handleDeleteInstance}
             style={{ marginTop: "20px" }}
             rowStyle={{ backgroundColor: "#f5f5f5" }}
@@ -204,32 +125,26 @@ function App() {
         )}
       </div>
 
-      <EditInstanceModal
-        show={editModalShow}
-        instance={editModalInstance}
-        onHide={() => setEditModalShow(false)}
-        onUpdate={handleUpdateInstance}
-      />
-
-      <DeleteInstance
-        show={deleteModalShow}
-        instance={deleteModalInstance}
-        onHide={() => setDeleteModalShow(false)}
-        onDelete={handleConfirmDelete}
-        deletingInstance={deletingInstance}
-      />
+      {isLoading && <ProgressBar animated now={100} />}
 
       {showAlert && responseMessage && (
-        <Alert variant="info">{responseMessage}</Alert>
+        <div className="alert-overlay">
+          <div className="alert-content">
+            <p>{responseMessage}</p>
+            <button className="dismiss-btn" onClick={dismissAlert}>
+              Ok
+            </button>
+          </div>
+        </div>
       )}
 
-      <div>
-        <div class="carousel">
-          <a href="Users/mustafa/simple-dl-app/simpledl-backend/Intsance_2/public_html/index.html">
-            Visit W3Schools.com!
-          </a>
-        </div>
-      </div>
+      {deleteModalInstance && (
+        <DeleteInstance
+          instance={deleteModalInstance}
+          onHide={() => setDeleteModalInstance("")}
+          onDelete={handleConfirmDelete}
+        />
+      )}
     </div>
   );
 }

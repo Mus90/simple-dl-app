@@ -1,16 +1,27 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import "./InstanceTable.css";
+import ReactPaginate from "react-paginate";
 
 const InstanceTable = ({ instances, onEdit, onDelete }) => {
-  const handleInstanceClick = (instance) => {
-    // Perform the desired action when the instance name is clicked
-    const fileUrl = `http://localhost:8081/api/${instance}/public_html/index.html`;
+  const [currentPage, setCurrentPage] = useState(0);
 
+  const handleInstanceClick = (instance) => {
+    const fileUrl = `http://localhost:8080/${instance}/public_html/`;
     // Open the file in a new browser tab/window
     window.open(fileUrl, "_blank");
   };
+
+  const handlePageChange = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const instancesPerPage = 10;
+  const offset = currentPage * instancesPerPage;
+  const instancesForCurrentPage = instances.slice(
+    offset,
+    offset + instancesPerPage
+  );
 
   return (
     <Router>
@@ -22,7 +33,7 @@ const InstanceTable = ({ instances, onEdit, onDelete }) => {
           </tr>
         </thead>
         <tbody>
-          {instances.map((instance) => (
+          {instancesForCurrentPage.map((instance) => (
             <tr key={instance}>
               <td>
                 <a href="#" onClick={() => handleInstanceClick(instance)}>
@@ -31,11 +42,12 @@ const InstanceTable = ({ instances, onEdit, onDelete }) => {
               </td>
               <>
                 <div className="instance-actions">
-                  <button onClick={() => onEdit(instance)}>
-                    <FontAwesomeIcon icon={faEdit} />
-                  </button>
-                  <button onClick={() => onDelete(instance)}>
-                    <FontAwesomeIcon icon={faTrashAlt} />
+                  <button onClick={() => onEdit(instance)}>Edit</button>
+                  <button
+                    onClick={() => onDelete(instance)}
+                    className="delete-button"
+                  >
+                    Delete
                   </button>
                 </div>
               </>
@@ -43,6 +55,13 @@ const InstanceTable = ({ instances, onEdit, onDelete }) => {
           ))}
         </tbody>
       </table>
+
+      <ReactPaginate
+        pageCount={Math.ceil(instances.length / instancesPerPage)} // Set the total number of pages based on the number of instances (assuming 10 instances per page)
+        onPageChange={handlePageChange} // Handle page changes
+        containerClassName="pagination"
+        activeClassName="active"
+      />
     </Router>
   );
 };

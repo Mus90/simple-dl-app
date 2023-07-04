@@ -5,29 +5,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.io.IOException;
+import java.nio.file.*;
 
 @Service
 public class ManageDlService {
-
-    public String activateInstance(String instanceName) throws IOException {
-
-        Process process = Runtime.getRuntime().exec("pwd");
-        printResults(process);
-
-        System.out.println("****** importing ********");
-        Process importProcess = Runtime.getRuntime().exec("perl "+instanceName+"/simpledl/bin/import.pl");
-        printResults(importProcess);
-
-        System.out.println("****** indexing ********");
-        Process indexProcess = Runtime.getRuntime().exec("perl "+instanceName+"/simpledl/bin/index.pl");
-        printResults(indexProcess);
-
-        System.out.println("****** generating ********");
-        Process generateProcess = Runtime.getRuntime().exec("perl "+instanceName+"/simpledl/bin/generate.pl --website --force");
-        printResults(generateProcess);
-
-        return "Simple DL activation process has been completed.";
-    }
 
     public String createNewInstance(String instanceName) throws IOException {
 
@@ -39,7 +21,7 @@ public class ManageDlService {
         printResults(createProcess);
 
         System.out.println("****** copy instance template ********");
-        Process copyTemplateProcess = Runtime.getRuntime().exec("cp simpleFiles/simpledl.tar.xz "+instanceName+"/simpledl.tar.xz ");
+        //Process copyTemplateProcess = Runtime.getRuntime().exec("cp simpleFiles/simpledl.tar.xz "+instanceName+"/simpledl.tar.xz ");
 
         Process copyTemplateProcess1 = Runtime.getRuntime().exec( "cp -R simpleFiles/db "+instanceName+"/db");
         printResults(copyTemplateProcess1);
@@ -47,16 +29,17 @@ public class ManageDlService {
         printResults(copyTemplateProcess2);
         Process copyTemplateProcess3 = Runtime.getRuntime().exec("cp -R simpleFiles/public_html "+instanceName+"/public_html");
         printResults(copyTemplateProcess3);
-        printResults(copyTemplateProcess);
+        //printResults(copyTemplateProcess);
 
         Process process2 = Runtime.getRuntime().exec("pwd");
         printResults(process2);
 
         System.out.println("****** extract instance template ********");
-        String[] cmd = { "/bin/sh", "-c", "cd /var/www/html/simple-dl-app/simpledl-backend/"+instanceName+"/; tar -xf simpledl.tar.xz" };
-        Process extractProcess = Runtime.getRuntime().exec(cmd);
-        printResults(extractProcess);
+        //String[] cmd = { "/bin/sh", "-c", "cd /var/www/html/simple-dl-app/simpledl-backend/"+instanceName+"/; tar -xf simpledl.tar.xz" };
+        //Process extractProcess = Runtime.getRuntime().exec(cmd);
+        //printResults(extractProcess);
 
+        activateInstance(instanceName);
         return "Instance has been created successfully.";
     }
 
@@ -85,6 +68,25 @@ public class ManageDlService {
         return instanceList;
     }
 
+    public String activateInstance(String instanceName) throws IOException {
+
+        Process process = Runtime.getRuntime().exec("pwd");
+        printResults(process);
+
+        System.out.println("****** importing ********");
+        Process importProcess = Runtime.getRuntime().exec("perl "+instanceName+"/simpledl/bin/import.pl");
+        printResults(importProcess);
+
+        System.out.println("****** indexing ********");
+        Process indexProcess = Runtime.getRuntime().exec("perl "+instanceName+"/simpledl/bin/index.pl");
+        printResults(indexProcess);
+
+        System.out.println("****** generating ********");
+        Process generateProcess = Runtime.getRuntime().exec("perl "+instanceName+"/simpledl/bin/generate.pl --website --force");
+        printResults(generateProcess);
+
+        return "Simple DL activation process has been completed.";
+    }
 
     public static String printResults(Process process) throws IOException {
         StringBuilder builder = new StringBuilder();
@@ -97,22 +99,4 @@ public class ManageDlService {
         System.out.println("  "+builder);
       return builder.toString();
     }
-
-    public String updateFile(String path)  {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(path));
-            BufferedWriter writer = new BufferedWriter(new FileWriter("simpleFiles/data/config/transform.xsl"));
-            String line;
-            while ((line=reader.readLine()) !=null) {
-                writer.write("\n"+line);
-            }
-            writer.close();
-            reader.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "File has been Updated";
-    }
-
 }

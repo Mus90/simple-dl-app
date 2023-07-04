@@ -73,16 +73,4 @@ public class ManageDlController {
         List<String> responseMessage = manageDlService.getInstances();
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
-
-    @PostMapping("/simple")
-    public ResponseEntity<String> updateFiles(@RequestBody FileDetails fileDetails) throws IOException {
-        String responseMessage;
-        //" simpleFiles/data/config/transform2.xsl"
-        if(fileDetails.getName().equals("xsl")) {
-            responseMessage = manageDlService.updateFile(fileDetails.getValue());
-        } else {
-            return new ResponseEntity<>(fileDetails.getName() + " File Type Not Supported", HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
-    }
 }

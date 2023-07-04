@@ -79,9 +79,21 @@ window.onload = function () {
  }
 
 function openInstanceInNewTab(instanceName) {
-  const filePath = `file:///Users/mustafa/simple-dl-app/simpledl-backend/${instanceName}/public_html/index.html`;
-  window.open(filePath, "_blank");
-}
+    fetch(`http://localhost:8081/api/files/${encodeURIComponent(instanceName)}/public_html/index.html`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.fileUrl) {
+          window.open(data.fileUrl, "_blank");
+        } else {
+          console.error("Error retrieving file URL");
+        }
+      })
+      .catch((error) => {
+        console.error("Error opening instance:", error);
+      });
+  }
+
+
   function showAlertMessage() {
     setShowAlert(true);
     setTimeout(() => {
