@@ -21,7 +21,7 @@ public class ManageDlService {
         printResults(createProcess);
 
         System.out.println("****** copy instance template ********");
-        //Process copyTemplateProcess = Runtime.getRuntime().exec("cp simpleFiles/simpledl.tar.xz "+instanceName+"/simpledl.tar.xz ");
+        Process copyTemplateProcess = Runtime.getRuntime().exec("cp simpleFiles/simpledl.tar.xz "+instanceName+"/simpledl.tar.xz ");
 
         Process copyTemplateProcess1 = Runtime.getRuntime().exec( "cp -R simpleFiles/db "+instanceName+"/db");
         printResults(copyTemplateProcess1);
@@ -29,15 +29,15 @@ public class ManageDlService {
         printResults(copyTemplateProcess2);
         Process copyTemplateProcess3 = Runtime.getRuntime().exec("cp -R simpleFiles/public_html "+instanceName+"/public_html");
         printResults(copyTemplateProcess3);
-        //printResults(copyTemplateProcess);
+        printResults(copyTemplateProcess);
 
         Process process2 = Runtime.getRuntime().exec("pwd");
         printResults(process2);
 
         System.out.println("****** extract instance template ********");
-        //String[] cmd = { "/bin/sh", "-c", "cd /var/www/html/simple-dl-app/simpledl-backend/"+instanceName+"/; tar -xf simpledl.tar.xz" };
-        //Process extractProcess = Runtime.getRuntime().exec(cmd);
-        //printResults(extractProcess);
+        String[] cmd = { "/bin/sh", "-c", "cd /var/www/html/simple-dl-app/simpledl-backend/"+instanceName+"/; tar -xf simpledl.tar.xz" };
+        Process extractProcess = Runtime.getRuntime().exec(cmd);
+        printResults(extractProcess);
 
         activateInstance(instanceName);
         return "Instance has been created successfully.";

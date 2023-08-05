@@ -13,9 +13,12 @@
 
 <xsl:output method="html" omit-xml-declaration="yes" encoding="UTF8"/>
 
-<xsl:template name="htmlheader">
+   <xsl:variable name="settingsfilename" select="concat ($Xbaserealdir, '/config/settings.xml')"/>
+   <xsl:variable name="settingsdocument" select="document($settingsfilename)"/>
+
+   <xsl:template name="htmlheader">
    <head>
-      <title>NDLTD Document4051</title>
+      <title><xsl:value-of select="$settingsdocument/settings/sitename"></xsl:value-of></title>
       <!-- Google sign-in -->
       <script src="https://apis.google.com/js/platform.js?onload=renderLoginButton" async="async" defer="defer">;</script>
       <meta name="google-signin-client_id" content="198962743816-7sdscou4pllp182nesibfg9e1281jn6a.apps.googleusercontent.com"/>
