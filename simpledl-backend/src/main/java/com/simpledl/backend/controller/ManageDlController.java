@@ -19,9 +19,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/")
@@ -42,7 +44,7 @@ public class ManageDlController {
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
-    @PostMapping("/simple/instance/{instanceName}")
+/*    @PostMapping("/simple/instance/{instanceName}")
     public ResponseEntity<String> createNewInstance(@PathVariable String instanceName) throws IOException {
         String responseMessage;
         String formattedInstanceName = instanceName.replaceAll("\\s+", "_"); // Replace spaces with underscores
@@ -54,7 +56,33 @@ public class ManageDlController {
         }
         System.out.println("Response Message: " + responseMessage); // Add this line
         return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }*/
+
+
+    @PostMapping("/simple/instance/{instanceName}")
+    public ResponseEntity<String> createNewInstance(
+            @PathVariable String instanceName,
+            @RequestBody Map<String, String> requestData
+    ) throws IOException, InterruptedException {
+        String responseMessage;
+        String formattedInstanceName = instanceName.replaceAll("\\s+", "_"); // Replace spaces with underscores
+        List<String> instanceList = manageDlService.getInstances();
+
+        if (!instanceList.contains(formattedInstanceName)) {
+            // Extract title, footer, and background color from the requestData map
+            String title = requestData.get("title");
+            String footer = requestData.get("footer");
+            String backgroundColor = requestData.get("backgroundColor");
+            responseMessage = manageDlService.createNewInstance(formattedInstanceName, title, footer, backgroundColor);
+
+        } else {
+            return new ResponseEntity<>("Instance already exists.", HttpStatus.CONFLICT);
+        }
+
+        System.out.println("Response Message: " + responseMessage);
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
+
 
     @DeleteMapping("/simple/instance/{instanceName}")
     public ResponseEntity<String> deleteInstance(@PathVariable String instanceName) throws IOException {

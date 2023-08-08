@@ -58,16 +58,26 @@ function App() {
     }
   };
 
-  const handleCreateInstance = async (newInstance) => {
+  const handleCreateInstance = async (newInstance, newTitle, newFooter, backgroundColor, logoImage) => {
     try {
       const trimmedInstance = newInstance.trim();
       if (trimmedInstance === "") {
         return;
       }
+  
       setIsLoading(true);
+  
+      // Send the title, footer, and background color along with the request
       await axios.post(
-        `http://localhost:8081/api/simple/instance/${newInstance}`
+        `http://localhost:8081/api/simple/instance/${newInstance}`,
+        {
+          title: newTitle,
+          footer: newFooter,
+          backgroundColor: backgroundColor,
+          logoImage: logoImage
+        }
       );
+  
       setResponseMessage(`Instance "${newInstance}" created successfully.`);
       fetchInstances();
     } catch (error) {
@@ -78,6 +88,7 @@ function App() {
       setShowAlert(true);
     }
   };
+
 
   const dismissAlert = () => {
     setShowAlert(false);
