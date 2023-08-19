@@ -1,10 +1,8 @@
 package com.simpledl.backend.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,89 +23,86 @@ public class ManageDlService {
 
         System.out.println("****** copy instance template ********");
         Process copyTemplateProcess = Runtime.getRuntime().exec("cp simpleFiles/simpledl.tar.xz "+instanceName+"/simpledl.tar.xz ");
+        printResults(copyTemplateProcess);
 
         Process copyTemplateProcess1 = Runtime.getRuntime().exec( "cp -R simpleFiles/db "+instanceName+"/db");
         printResults(copyTemplateProcess1);
+
         Process copyTemplateProcess2 = Runtime.getRuntime().exec("cp -R simpleFiles/data "+instanceName+"/data");
         printResults(copyTemplateProcess2);
 
         Process copyTemplateProcess3 = Runtime.getRuntime().exec("cp -R simpleFiles/public_html "+instanceName+"/public_html");
         printResults(copyTemplateProcess3);
-        printResults(copyTemplateProcess);
 
         Process process2 = Runtime.getRuntime().exec("pwd");
         printResults(process2);
 
         System.out.println("****** extract instance template ********");
-        String[] cmd = { "/bin/sh", "-c", "cd /var/www/html/simple-dl-app/simpledl-backend/"+instanceName+"/; tar -xf simpledl.tar.xz" };
-        Process extractProcess = Runtime.getRuntime().exec(cmd);
+        // copy simpledl directory which is in the current directory to instance directory include all subsequent directories and files
+        Process extractProcess = Runtime.getRuntime().exec("tar -xvf "+instanceName+"/simpledl.tar.xz -C "+instanceName);
         printResults(extractProcess);
+
+        String indexPath = instanceName + "/public_html/index.html";
+       //String styleCssPath = getStyleCssPath(instanceName);
+       //modifyIndexHtml(indexPath, styleCssPath, title, footer, backgroundColor);
 
         activateInstance(instanceName);
 
-        String indexPath = instanceName + "/public_html/index.html";
-        String styleCssPath = getStyleCssPath(instanceName);
-        modifyIndexHtml(indexPath, styleCssPath, title, footer, backgroundColor);
-
-
         return "Instance has been created successfully.";
     }
-
-    private void modifyIndexHtml(String indexPath, String stylePath, String title, String footer, String backgroundColor) throws IOException {
-        Path path = Paths.get(indexPath);
-        Path path_two = Paths.get(stylePath);
-        List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
-        List<String> lines_two = Files.readAllLines(path_two, StandardCharsets.UTF_8);
-        boolean insideAboutDiv = false;
-
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-
-            // Modify the <title> tag
-            if (line.contains("<title>")) {
-                lines.set(i, "      <title>" + title + "</title>");
-            }
-
-            if (line.contains("<div class=\"aboutfhya linesection\">")) {
-                insideAboutDiv = true;
-                continue;
-            }
-
-            if (insideAboutDiv && line.contains("<p>")) {
-
-                lines.set(i, "    <p>" + footer + "</p>");
-                insideAboutDiv = false;
-            }
-
-            boolean insideBodySelector = false;
-
-            for (int s = 0; s < lines_two.size(); s++) {
-                String line_two = lines_two.get(s);
-
-                if (insideBodySelector) {
-                    if (line_two.contains("}")) {
-                        insideBodySelector = false;
-                    } else if (line_two.contains("background-color")) {
-                        line_two = line_two.replace("background-color: #ded7cd;", "background-color: " + backgroundColor + ";");
-                        lines_two.set(s, line_two);
-                    }
-                } else if (line_two.contains("body {")) {
-                    insideBodySelector = true;
-                }
-            }
-
-        }
-
-        Files.write(path, lines, StandardCharsets.UTF_8);
-        Files.write(path_two, lines_two, StandardCharsets.UTF_8);
-    }
-    private String getStyleCssPath(String instanceName) {
-
-        String styleCssPath = instanceName + "/public_html/styles/style.css";
-        return styleCssPath;
-    }
-
-
+//    private void modifyIndexHtml(String indexPath, String stylePath, String title, String footer, String backgroundColor) throws IOException {
+//        Path path = Paths.get(indexPath);
+//        Path path_two = Paths.get(stylePath);
+//        List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+//        List<String> lines_two = Files.readAllLines(path_two, StandardCharsets.UTF_8);
+//        boolean insideAboutDiv = false;
+//
+//        for (int i = 0; i < lines.size(); i++) {
+//            String line = lines.get(i);
+//
+//            // Modify the <title> tag
+//            if (line.contains("<title>")) {
+//                lines.set(i, "      <title>" + title + "</title>");
+//            }
+//
+//            if (line.contains("<div class=\"aboutfhya linesection\">")) {
+//                insideAboutDiv = true;
+//                continue;
+//            }
+//
+//            if (insideAboutDiv && line.contains("<p>")) {
+//
+//                lines.set(i, "    <p>" + footer + "</p>");
+//                insideAboutDiv = false;
+//            }
+//
+//            boolean insideBodySelector = false;
+//
+//            for (int s = 0; s < lines_two.size(); s++) {
+//                String line_two = lines_two.get(s);
+//
+//                if (insideBodySelector) {
+//                    if (line_two.contains("}")) {
+//                        insideBodySelector = false;
+//                    } else if (line_two.contains("background-color")) {
+//                        line_two = line_two.replace("background-color: #ded7cd;", "background-color: " + backgroundColor + ";");
+//                        lines_two.set(s, line_two);
+//                    }
+//                } else if (line_two.contains("body {")) {
+//                    insideBodySelector = true;
+//                }
+//            }
+//
+//        }
+//
+//        Files.write(path, lines, StandardCharsets.UTF_8);
+//        Files.write(path_two, lines_two, StandardCharsets.UTF_8);
+//    }
+//    private String getStyleCssPath(String instanceName) {
+//
+//        String styleCssPath = instanceName + "/public_html/styles/style.css";
+//        return styleCssPath;
+//    }
     public String deleteInstance(String instanceName) throws IOException {
 
         Process process = Runtime.getRuntime().exec("pwd");
