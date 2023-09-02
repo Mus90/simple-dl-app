@@ -1,0 +1,74 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+<title>The new title</title>
+<script src="https://apis.google.com/js/platform.js?onload=renderLoginButton" async="async" defer>;</script><meta name="google-signin-client_id" content="198962743816-7sdscou4pllp182nesibfg9e1281jn6a.apps.googleusercontent.com">
+<link href="styles/material-components-web.min.css" rel="stylesheet">
+<script src="styles/material-components-web.min.js">;</script><link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+<link rel="stylesheet" type="text/css" href="slick/slick.css">
+<link rel="stylesheet" type="text/css" href="slick/slick-theme.css">
+<script language="Javascript" src="scripts/search.js">;</script><script language="Javascript">
+         var basedir = "";
+      </script><script language="Javascript" src="scripts/login.js">;</script><link rel="stylesheet" title="mainstyle" type="text/css" href="styles/style.css">
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300;0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+<style>
+         body{
+            background-color: #ffffff !important;
+         }
+      </style>
+</head>
+<body onLoad="doSearch (''); checkCookies (); return false"><div class="content">
+<div class="banner">
+<div class="banner-logo"><a href="index.html"><img src="images/docs.jpg"></a></div>
+<div class="banner-logins"><div class="banner-login"><div id="login"><a href="login.html" onClick="login1(this.href); return false">Login / Register</a></div></div></div>
+<div class="banner-links">
+<a href="index.html">Home</a> | 
+         <a href="about.html">About</a> | 
+         <a href="users.html">Authors</a> | 
+         <a href="search.html">Search</a> | 
+         <a href="contact.html">Contact Us</a>
+</div>
+</div>
+<h1>Authors</h1>
+<p>List of contributors to collections (draft)</p>
+<hr>
+<div class="searchgrid">
+<div class="searchmenu"><p><form name="searchform" method="post" action="#" onSubmit="doSearch (document.forms['searchform'].elements['searchbox'].value); return false">
+<label class="mdc-text-field mdc-text-field--filled searchbox2class"><span class="mdc-text-field__ripple"></span><input class="mdc-text-field__input" name="searchbox" id="searchbox" type="text" aria-labelledby="searchbox"><span class="mdc-floating-label" id="searchbox">Enter your search terms:</span><span class="mdc-line-ripple"></span></label><script>
+                     mdc.textField.MDCTextField.attachTo(document.querySelector('.mdc-text-field'));
+                  </script><script>
+                     var toplevel = 'users';
+                     if (document.forms['searchform'].elements['searchbox'].value == '')
+                     {
+                        var fields = window.location.href.split('query=');
+                        if (fields.length == 2)
+                         { 
+                            fields[1] = fields[1].replace (/%20/, " ");
+                            document.forms['searchform'].elements['searchbox'].value = fields[1]; 
+                         }
+                     }
+                  </script><h3>Arrange by...</h3>
+<p><select name="sort" style="width: 100%" onChange="doSearch (); return false"><option value="relevance">relevance</option>
+<option value="name">name</option></select></p>
+<input type="hidden" name="index" value="1">
+</form></p></div>
+<div class="searchresults">
+<h3>List of Authors</h3>
+<form name="pager" action="#" onSubmit="return false"><div class="searchnav">
+<div class="searchnav1">
+                  Showing <span id="resultsstart">0</span> to <span id="resultsend">0</span> of <span id="numberofresults">0</span> results
+                  </div>
+<div class="searchnav2">
+                  Page: <a href="" onClick="prevPage(); return false">«</a><input type="text" name="pagenumber" value="1" onChange="displayPage()"><a href="" onClick="nextPage(); return false">»</a> 
+                    
+                  
+                  Results per page: <input type="text" name="resultsperpage" value="50" onChange="displayPage ()">
+</div>
+</div></form>
+<div id="resultlist"></div>
+</div>
+</div>
+</div></body>
+</html>

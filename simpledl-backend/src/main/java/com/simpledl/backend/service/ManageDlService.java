@@ -1,13 +1,21 @@
 package com.simpledl.backend.service;
 
 import org.springframework.stereotype.Service;
+import org.w3c.dom.*;
 import java.io.*;
-
+import javax.xml.parsers.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.Objects;
 
 @Service
 public class ManageDlService {
@@ -46,10 +54,49 @@ public class ManageDlService {
        //String styleCssPath = getStyleCssPath(instanceName);
        //modifyIndexHtml(indexPath, styleCssPath, title, footer, backgroundColor);
 
+        DynamicContent(instanceName, title, backgroundColor);
         activateInstance(instanceName);
 
         return "Instance has been created successfully.";
     }
+
+    private void DynamicContent(String instanceName, String title, String backgroundColor){
+        try{
+            File xmlFile = new File(instanceName+ "/data/config/settings.xml");
+
+            if(Objects.equals(title, "")) {
+                title = "Page Title";
+            }
+
+            if(Objects.equals(backgroundColor, "")){
+                backgroundColor = "#ded7cd";
+            }
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(xmlFile))){
+                String line;
+
+                while ((line = reader.readLine()) != null){
+                    stringBuilder.append(line).append(System.lineSeparator());
+                }
+            }
+
+            String updateXlmContent = stringBuilder.toString()
+                    .replaceAll("<title>.*</title>", "<title>" + title + "</title>")
+                    .replaceAll("<backgroundColor>.*</backgroundColor>", "<backgroundColor>" + backgroundColor + "</backgroundColor>");
+
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter(xmlFile, false))){
+                writer.write(updateXlmContent);
+            }
+            System.out.println("Title Updated Successfully");
+
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
 //    private void modifyIndexHtml(String indexPath, String stylePath, String title, String footer, String backgroundColor) throws IOException {
 //        Path path = Paths.get(indexPath);
 //        Path path_two = Paths.get(stylePath);
@@ -142,8 +189,13 @@ public class ManageDlService {
         printResults(indexProcess);
 
         System.out.println("****** generating ********");
-        Process generateProcess = Runtime.getRuntime().exec("perl "+instanceName+"/simpledl/bin/generate.pl --website --force");
+        Process generateProcess = Runtime.getRuntime().exec("perl "+instanceName+"/simpledl/bin/generate.pl --website  --force");
         printResults(generateProcess);
+
+
+        System.out.println("****** generating ********");
+        Process generateProcessForce = Runtime.getRuntime().exec("perl "+instanceName+"/simpledl/bin/generate.pl --force");
+        printResults(generateProcessForce);
 
         return "Simple DL activation process has been completed.";
     }

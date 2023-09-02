@@ -7,10 +7,11 @@ const InstanceTable = ({ instances, onEdit, onDelete }) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const handleInstanceClick = (instance) => {
-    const fileUrl = `http://localhost:80/${instance}/public_html/`;
+    const fileUrl = `http://localhost:8081/${instance}/public_html/index.html`;
     // Open the file in a new browser tab/window
     window.open(fileUrl, "_blank");
   };
+  
 
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage.selected);
