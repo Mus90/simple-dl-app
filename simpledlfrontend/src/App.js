@@ -21,9 +21,7 @@ function App() {
 
   const fetchInstances = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8081/api/simple/instances"
-      );
+      const response = await axios.get("http://localhost:8081/api/manage/instances");
       setInstances(response.data);
     } catch (error) {
       console.error("Error fetching instances:", error);
@@ -39,12 +37,8 @@ function App() {
     try {
       setShowAlert(false);
       setIsLoading(true);
-      await axios.delete(
-        `http://localhost:8081/api/simple/instance/${deleteModalInstance}`
-      );
-      setResponseMessage(
-        `Instance "${deleteModalInstance}" deleted successfully.`
-      );
+      await axios.delete(`http://localhost:8081/api/manage/delete/${deleteModalInstance}`);
+      setResponseMessage(`Instance "${deleteModalInstance}" deleted successfully.`);
       fetchInstances();
     } catch (error) {
       console.error("Error deleting instance:", error);
@@ -66,17 +60,16 @@ function App() {
       }
   
       setIsLoading(true);
+      const formData = new FormData();
+      formData.append('instanceName', trimmedInstance);
+      formData.append('title', newTitle);
+      formData.append('footer', newFooter);
+      formData.append('backgroundColor', backgroundColor);
+      if (logoImage) {
+          formData.append('imageFile', logoImage);
+      }
   
-      // Send the title, footer, and background color along with the request
-      await axios.post(
-        `http://localhost:8081/api/simple/instance/${newInstance}`,
-        {
-          title: newTitle,
-          footer: newFooter,
-          backgroundColor: backgroundColor,
-          logoImage: logoImage
-        }
-      );
+      await axios.post(`http://localhost:8081/api/manage/create`, formData);
   
       setResponseMessage(`Instance "${newInstance}" created successfully.`);
       fetchInstances();
@@ -88,7 +81,6 @@ function App() {
       setShowAlert(true);
     }
   };
-
 
   const dismissAlert = () => {
     setShowAlert(false);

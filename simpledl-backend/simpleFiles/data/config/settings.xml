@@ -1,4 +1,6 @@
 <settings>
 	<title>ins6789</title>
 	<backgroundColor>#e70d26</backgroundColor>
+	<footer>footer</footer>
+	<logo>docs.jpg</logo>
 </settings>

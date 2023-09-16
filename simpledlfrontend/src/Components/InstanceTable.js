@@ -11,7 +11,6 @@ const InstanceTable = ({ instances, onEdit, onDelete }) => {
     // Open the file in a new browser tab/window
     window.open(fileUrl, "_blank");
   };
-  
 
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage.selected);
@@ -41,7 +40,7 @@ const InstanceTable = ({ instances, onEdit, onDelete }) => {
                   {instance}
                 </a>
               </td>
-              <>
+              <td>
                 <div className="instance-actions">
                   <button onClick={() => onEdit(instance)}>Edit</button>
                   <button
@@ -51,7 +50,7 @@ const InstanceTable = ({ instances, onEdit, onDelete }) => {
                     Delete
                   </button>
                 </div>
-              </>
+              </td>
             </tr>
           ))}
         </tbody>
