@@ -1,5 +1,8 @@
 package com.simpledl.backend.service;
 
+import com.simpledl.backend.model.Statistic;
+import com.simpledl.backend.repository.StatisticRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
@@ -8,20 +11,25 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.text.DateFormat;
+import java.util.*;
+
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ManageDlService {
-
+    @Autowired
+    StatisticRepository repository;
     public String createNewInstance(String instanceName, String title, String footer, String backgroundColor, MultipartFile imageFile) throws IOException {
         try {
             executeCommand("pwd");
             executeCommand("mkdir " + instanceName);
+            Statistic statistic = new Statistic();
+            statistic.setName(instanceName);
+            statistic.setExtractStartTime(new Date());
+
             executeCommand("cp simpleFiles/simpledl.tar.xz " + instanceName + "/simpledl.tar.xz");
+
             executeCommand("cp -R simpleFiles/db " + instanceName + "/db");
             executeCommand("cp -R simpleFiles/data " + instanceName + "/data");
             executeCommand("cp -R simpleFiles/public_html " + instanceName + "/public_html");
@@ -35,7 +43,11 @@ public class ManageDlService {
             }
 
             DynamicContent(instanceName, title, backgroundColor, footer, logoFilename);
-            activateInstance(instanceName);
+
+            statistic.setExtractEndTime(new Date());
+
+            activateInstance(instanceName,statistic);
+            repository.save(statistic);
 
             return "Instance has been created successfully.";
         } catch (Exception e) {
@@ -105,10 +117,39 @@ public class ManageDlService {
     public String activateInstance(String instanceName) throws IOException {
         try {
             executeCommand("pwd");
+            System.out.println("2: importing ...");
             executeCommand("perl " + instanceName + "/simpledl/bin/import.pl");
+            System.out.println("3: indexing ...");
             executeCommand("perl " + instanceName + "/simpledl/bin/index.pl");
+            System.out.println("4: generating ...");
             executeCommand("perl " + instanceName + "/simpledl/bin/generate.pl --website  --force");
             executeCommand("perl " + instanceName + "/simpledl/bin/generate.pl --force");
+
+            return "Simple DL activation process has been completed.";
+        } catch (Exception e) {
+            throw new RuntimeException("Error while activating instance: " + e.getMessage(), e);
+        }
+    }
+
+    public String activateInstance(String instanceName,Statistic statistic) throws IOException {
+        try {
+            executeCommand("pwd");
+            System.out.println("2: importing ...");
+            statistic.setImportStartTime(new Date());
+            executeCommand("perl " + instanceName + "/simpledl/bin/import.pl");
+            statistic.setImportEndTime(new Date());
+
+            statistic.setIndexStartTime(new Date());
+            System.out.println("3: indexing ...");
+            executeCommand("perl " + instanceName + "/simpledl/bin/index.pl");
+            statistic.setIndexEndTime(new Date());
+
+            statistic.setGenerateStartTime(new Date());
+            System.out.println("4: generating ...");
+            executeCommand("perl " + instanceName + "/simpledl/bin/generate.pl --website  --force");
+            executeCommand("perl " + instanceName + "/simpledl/bin/generate.pl --force");
+            statistic.setGenerateEndTime(new Date());
+
             return "Simple DL activation process has been completed.";
         } catch (Exception e) {
             throw new RuntimeException("Error while activating instance: " + e.getMessage(), e);
