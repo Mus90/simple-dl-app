@@ -22,6 +22,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000") // Update with your frontend URL
+                .allowedOrigins("http://172.31.23.17:3000")
+                .allowedOrigins("http://54.75.136.57:3000/:3000")
+                .allowedOrigins()
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*");
     }
