@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins="*")
 @RequestMapping("/api/manage")
 public class ManageDlController {
 
