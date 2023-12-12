@@ -6,6 +6,7 @@ import Card from "react-bootstrap/Card";
 import { Row, Col } from "react-bootstrap";
 import { ChromePicker } from "react-color";
 import "./CreateInstance.css";
+import { API_URL} from '../Constants'
 
 function CreateInstance() {
   const [newInstance, setNewInstance] = useState("");
@@ -31,7 +32,7 @@ function CreateInstance() {
     }
 
     try {
-        const response = await fetch(`http://localhost:8081/api/manage/create/${instanceName}`, {
+        const response = await fetch(`${API_URL}/api/manage/create/${instanceName}`, {
             method: 'POST',
             body: formData,
         });

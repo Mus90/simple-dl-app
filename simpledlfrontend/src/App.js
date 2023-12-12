@@ -6,6 +6,7 @@ import DeleteInstance from "./Components/DeleteInstance";
 import CreateInstance from "./Components/CreateInstance";
 import Nav from "react-bootstrap/Nav";
 import "./App.css";
+import { API_URL} from './Constants'
 
 function App() {
   const [instances, setInstances] = useState([]);
@@ -21,7 +22,7 @@ function App() {
 
   const fetchInstances = async () => {
     try {
-      const response = await axios.get("http://localhost:8081/api/manage/instances");
+      const response = await axios.get(`${API_URL}/api/manage/instances`);
       setInstances(response.data);
     } catch (error) {
       console.error("Error fetching instances:", error);
@@ -37,7 +38,7 @@ function App() {
     try {
       setShowAlert(false);
       setIsLoading(true);
-      await axios.delete(`http://localhost:8081/api/manage/delete/${deleteModalInstance}`);
+      await axios.delete(`${API_URL}/api/manage/delete/${deleteModalInstance}`);
       setResponseMessage(`Instance "${deleteModalInstance}" deleted successfully.`);
       fetchInstances();
     } catch (error) {
@@ -69,7 +70,7 @@ function App() {
           formData.append('imageFile', logoImage);
       }
   
-      await axios.post(`http://localhost:8081/api/manage/create`, formData);
+      await axios.post(`${API_URL}/api/manage/create`, formData);
   
       setResponseMessage(`Instance "${newInstance}" created successfully.`);
       fetchInstances();
