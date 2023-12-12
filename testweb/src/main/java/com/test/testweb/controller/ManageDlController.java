@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/manage")
 public class ManageDlController {
 
@@ -20,6 +20,7 @@ public class ManageDlController {
         return ResponseEntity.ok("response");
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/instances")
     public ResponseEntity<List<String>> getInstances() {
         List<String> supplierNames = new ArrayList<>();
