@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import "./InstanceTable.css";
 import ReactPaginate from "react-paginate";
-import { API_URL} from '../Constants'
+import { API_URL_HTTP} from '../Constants'
 
 const InstanceTable = ({ instances, onEdit, onDelete }) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const handleInstanceClick = (instance) => {
-    const fileUrl = `${API_URL}/${instance}/public_html/index.html`;
+    const fileUrl = `${API_URL_HTTP}/simple-dl-app/simpledl-backend/${instance}/public_html/index.html`;
     // Open the file in a new browser tab/window
     window.open(fileUrl, "_blank");
   };
