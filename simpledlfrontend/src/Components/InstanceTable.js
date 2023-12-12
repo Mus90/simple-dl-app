@@ -37,7 +37,7 @@ const InstanceTable = ({ instances, onEdit, onDelete }) => {
           {instancesForCurrentPage.map((instance) => (
             <tr key={instance}>
               <td>
-                <a href="#" onClick={() => handleInstanceClick(instance)}>
+                <a href="/#" onClick={() => handleInstanceClick(instance)}>
                   {instance}
                 </a>
               </td>
